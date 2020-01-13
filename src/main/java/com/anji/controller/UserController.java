@@ -21,8 +21,8 @@ public class UserController {
 		return userService.getAllUsers();
 	}
 	
-	@GetMapping("/users/login")
-	public boolean loginUser(@Valid @RequestBody User user) {
+	@PostMapping("/login")
+	public User loginUser(@Valid @RequestBody User user) {
 		return userService.loginUser(user);
 	}
 

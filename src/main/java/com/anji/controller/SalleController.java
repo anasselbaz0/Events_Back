@@ -1,6 +1,5 @@
 package com.anji.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -14,11 +13,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anji.entity.Salle;
+import com.anji.helper.SalleReservation;
 import com.anji.service.SalleService;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.deser.std.DateDeserializers.DateDeserializer;
 
 @RestController
 public class SalleController {
-
+	
 	@Autowired
 	private SalleService salleService;
 	
@@ -42,14 +44,21 @@ public class SalleController {
 		salleService.deleteSalle(id);
 	}
 	
-	@PostMapping("/salles/isreserved")
-	public boolean isReserved(@Valid @RequestBody Date date, @Valid @RequestBody Salle salle) {
-		return salleService.isReserved(date, salle);
+	@JsonDeserialize(using = DateDeserializer.class)
+	@GetMapping("/salles/isreserved")
+	public boolean isReserved(@Valid @RequestBody SalleReservation salleReservation) {
+		Salle salle = salleService.getSalleByCode(salleReservation.getCode());
+		return salleService.isReserved(salleReservation.getDate(), salle);
 	}
 	
-	@PostMapping("/salles/reserver/{Id}")
-	public void reserver(@Valid @RequestBody String sdate, @PathVariable("Id") Long id) {
-		Salle salle = salleService.getSalleById(id);
-		salleService.reserver(sdate, salle);
+	@JsonDeserialize(using = DateDeserializer.class)
+	@PostMapping("/salles/reserver")
+	public void reserver(@Valid @RequestBody SalleReservation salleReservation) {
+		System.out.println(111122);
+		Salle salle = null;
+		salle = salleService.getSalleByCode(salleReservation.getCode());
+		if (salle != null) {
+			salleService.reserver(salleReservation.getDate(), salle);
+		}
 	}
 }

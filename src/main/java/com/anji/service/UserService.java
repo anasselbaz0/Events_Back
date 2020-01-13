@@ -14,14 +14,12 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 	
-	public boolean loginUser(User user) {
+	public User loginUser(User user) {
 		User dbUser = userRepository.findByUsername(user.getUsername());
-		
-		if(dbUser.equals(user)) 
-		{
-			return true;
+		if (user.equals(dbUser)) {
+			return dbUser;
 		}
-		return false;
+		return null;
 	}
 	
 	public List<User> getAllUsers() {

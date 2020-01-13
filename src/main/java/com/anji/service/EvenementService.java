@@ -30,9 +30,10 @@ public class EvenementService {
 		evenementRepos.deleteById(id);
 	}
 
-	public void valider(Long id) {
-		Evenement e = evenementRepos.getOne(id);
+	public void valider(Evenement e) {
 		e.setValid(true);
+		System.out.println(e);
+		evenementRepos.deleteById(evenementRepos.findByTitre(e.getTitre()).getId());
 		evenementRepos.save(e);
 	}
 }

@@ -1,7 +1,6 @@
 package com.anji.service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import com.anji.entity.Salle;
 import com.anji.repository.SalleRepository;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.deser.std.DateDeserializers.DateDeserializer;
 
 @Service
 public class SalleService {
@@ -40,21 +41,16 @@ public class SalleService {
 	}
 
 	public boolean isReserved(@Valid Date date, Salle salle) {
+		if (salle == null) return false;
 		return salle.getDatesDeReservation().contains(date);	
 	}
 	
-	public void reserver(@Valid String sdate, Salle salle) {
-		String pattern = "yyyy-MM-dd";
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-		Date date = null;
-		try {
-			date = simpleDateFormat.parse(sdate);
-			System.out.println(simpleDateFormat.format(date));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public void reserver(@Valid Date date, Salle salle) {
+		if (salle.getDatesDeReservation() == null) {
+			salle.setDatesDeReservation(new ArrayList<Date>());
 		}
-		salle.getDatesDeReservation().add(date);
+		salle.addReservation(date);
+		System.out.println(salle);
 		salleRepos.save(salle);
 	}
 	

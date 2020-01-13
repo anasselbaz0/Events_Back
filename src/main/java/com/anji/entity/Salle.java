@@ -38,6 +38,10 @@ public class Salle implements Serializable {
 		datesDeReservation = new ArrayList<>();
 	}
 
+	public void addReservation(Date d) {
+		this.datesDeReservation.add(d);
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -72,6 +76,12 @@ public class Salle implements Serializable {
 
 	public ArrayList<Date> getDatesDeReservation() {
 		return datesDeReservation;
+	}
+
+	@Override
+	public String toString() {
+		return "Salle [id=" + id + ", code=" + code + ", type=" + type + ", datesDeReservation=" + datesDeReservation
+				+ ", equipements=" + equipements + ", reservation=" + reservation + "]";
 	}
 
 	public void setDatesDeReservation(ArrayList<Date> datesDeReservation) {
